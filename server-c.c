@@ -18,8 +18,62 @@
  * Return 0 on success, non-zero on failure
 */
 int server(char *server_port) {
-    return 0;
-}
+
+    int status, sock, client, client_len, numBytes;
+    char buf[RECV_BUFFER_SIZE];
+    struct sockaddr_in serv_addr;
+    struct sockaddr_in client_addr;
+
+    // Support IPv4
+    server_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = INADDR_ANY;
+    // atoi converts from ASCII to integer
+    // htons handles different byte orderings used by different computers
+  	serv_addr.sin_port = htons(atoi(server_port));
+
+  	// Create socket (IPv4 and TCP)
+  	sock = socket(serv_addr.sin_family, SOCK_STREAM, 0);
+    
+	if (sock == -1) {
+		perror("ERROR: Initializing socket ");
+    	exit(1);
+	}
+             
+    if (bind(sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
+        perror("ERROR: Binding socket ");
+    	exit(1);
+    }
+
+    if (listen(sock, QUEUE_LENGTH) == -1) {
+		perror("ERROR: Listening");
+		exit(1);
+	}
+
+	client_len = sizeof(client_addr);
+
+	// Loop indefinitely
+	while(1) {
+
+		client = accept(sock, (struct sockaddr *) &client_addr, &client_len);
+		if (client == -1) {
+			perror("ERROR: Accepting client");
+			exit(1);
+		}
+
+		// Copy 0s into buffer
+		bzero(buf, RECV_BUFFER_SIZE);
+		// numBytes is how many bytes were received
+		numBytes = read(client, buf, RECV_BUFFER_SIZE);
+
+		if (numBytes < 0) {
+			perror("ERROR: Reading from client");
+		} else {
+			printf("%s", buf);
+		}
+		fflush(stdout);
+	}
+}  
+
 
 /*
  * main():
