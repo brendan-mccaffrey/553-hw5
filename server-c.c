@@ -25,7 +25,7 @@ int server(char *server_port) {
     struct sockaddr_in client_addr;
 
     // Support IPv4
-    server_addr.sin_family = AF_INET;
+    serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
     // atoi converts from ASCII to integer
     // htons handles different byte orderings used by different computers

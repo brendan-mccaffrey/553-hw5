@@ -8,6 +8,7 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <errno.h>
+#include <arpa/inet.h>
 
 #define SEND_BUFFER_SIZE 2048
 
@@ -29,19 +30,19 @@ int client(char *server_ip, char *server_port) {
   }
 
   
-  server_addr.sin_family = AF_INET; // Support IPv4
+  serv_addr.sin_family = AF_INET; // Support IPv4
   serv_addr.sin_addr.s_addr = inet_addr(server_ip); // This would be inet_pton(server_ip) for IPv6
   serv_addr.sin_port = htons(atoi(server_port)); // atoi converts from ASCII to integer
   // htons handles different byte orderings used by different computers
 
-  if (connect(s, (struct sockaddr *)&servaddr, sizeof(servaddr)) == -1) {
+  if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == -1) {
     perror("ERROR: Connecting to server");
     exit(1);
   } else {
     printf("Connected to server!");
     while (fgets(input, SEND_BUFFER_SIZE, stdin)) {
       len = strlen(input);
-      numBytes = send(s, input, len, 0);
+      numBytes = send(sock, input, len, 0);
       if (numBytes < len) {
         // WE NEED TO RESEND SOME DATA
       }
