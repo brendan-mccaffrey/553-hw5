@@ -1,6 +1,6 @@
 # Project 5: Socket Programming
 
-This is a homework project I completed with my good friend and project partner Manny Kuflik.
+This is a homework project I completed with my good friend and project partner Manny Kuflik. This server-client socket implementation was done in C. The specification it meets it below.
 
 ##### Server specification
 * The server program should listen on a socket, wait for a client to connect, receive a stream of bytes from the client, print those bytes directly to stdout, and then wait for the next client indefinitely.
@@ -17,6 +17,6 @@ This is a homework project I completed with my good friend and project partner M
 * The client should handle partial sends (when a socket only transmits part of the data given in the last `send` call) by attempting to re-send the rest of the data until it has all been sent.
 * The client should gracefully handle error values potentially returned by socket programming library functions.
 
-# Credit
+### Credit
 This project adapted, with permission, from Nick Feamster [feamster -at- uchicago . edu].
 
